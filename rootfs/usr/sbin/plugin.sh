@@ -105,24 +105,44 @@ plugin_execute_build() {
   popd
 }
 
+plugin_wait_for_database() {
+    local host_name="${1}"
+    local default_port="${2}"
+    if ! grep -q ":" <<<${host_name}
+    then
+        host_name="${host_name}:${default_port}"
+    fi
+    echo "$ wait-for-it ${host_name}"
+    wait-for-it "${host_name}"
+}
+
 plugin_check_database() {
-  case "${PLUGIN_DB_TYPE}" in
+  local db_type="${1}"
+  local host_to_wait="${2}"
+  case "${db_type}" in
     sqlite)
       ;;
-    mysql|pgsql|oci)
-      echo "wait-for-it ${PLUGIN_DB_HOST}"
-      wait-for-it "${PLUGIN_DB_HOST}"
+    mysql)
+        plugin_wait_for_database "$host_to_wait" 3306
+      ;;
+    pgsql)
+        plugin_wait_for_database "$host_to_wait" 5432
+      ;;
+    oci)
+        plugin_wait_for_database "$host_to_wait" 1521
       ;;
     *)
-      echo "\"${PLUGIN_DB_TYPE}\" is a unsupported database type !"
+      echo "\"${db_type}\" is a unsupported database type !"
       exit 1
       ;;
   esac
+
+
 }
 
 plugin_install_owncloud() {
   echo "installing owncloud"
-  plugin_check_database
+  plugin_check_database "${PLUGIN_DB_TYPE}" "${PLUGIN_DB_HOST}"
 
   _occ_command="./occ maintenance:install -vvv \
         --database=${PLUGIN_DB_TYPE} \
