@@ -17,6 +17,9 @@ The branch to fetch from https://github.com/owncloud/core
 - `DOWNLOAD_URL`  
 Provide a tarball from a different location
 
+- `EXCLUDE`
+Exclude files/folders from being copied to the workspace. This is useful when testing apps that are included in the nightly tarballs. The exclude pattern uses rsync `--exclude` logic
+
 
 If `CORE_PATH` is not defined - the plugin assumes the workspace directory is nested two directories deeper in relation to the owncloud folder
 
@@ -56,6 +59,7 @@ DB_USERNAME        (owncloud)
 DB_PASSWORD        (owncloud)
 DB_HOST            (localhost:3306)
 DB_PREFIX          (oc_)
+EXCLUDE            
 ```
 ## Examples
 
@@ -102,6 +106,22 @@ services:
       - MYSQL_PASSWORD=secret
       - MYSQL_DATABASE=oc_db
       - MYSQL_ROOT_PASSWORD=secret
+```
+
+**Exclude folders/files from core**
+
+```
+workspace:
+  base: /var/www/owncloud
+  path: apps/my_app
+
+pipeline:
+  install-server:
+    image: owncloudci/core
+    pull: true
+    exclude:
+      - apps/notifications
+    version: daily-stable10-qa
 ```
 
 ## Issues, Feedback and Ideas

@@ -39,6 +39,8 @@ declare -x PLUGIN_DOWNLOAD_FILENAME
 declare -x PLUGIN_EXTRACT_PARAMS
 [[ -z "${PLUGIN_EXTRACT_PARAMS}" ]] && PLUGIN_EXTRACT_PARAMS="xj"
 
+declare -x PLUGIN_EXCLUDE
+[[ -z "${PLUGIN_EXCLUDE}" ]] && PLUGIN_EXCLUDE=""
 
 # Installation related variables
 declare -x PLUGIN_INSTALL
@@ -71,15 +73,20 @@ declare -x PLUGIN_DB_HOST
 declare -x PLUGIN_DB_PREFIX
 [[ -z "${PLUGIN_DB_PREFIX}" ]] && PLUGIN_DB_PREFIX="oc_"
 
+#
 
+readonly PLUGIN_TMP_DIR="/tmp/owncloud/"
+
+#
 plugin_oc_from_tarball() {
-  echo "\$ wget -qO- ${PLUGIN_DOWNLOAD_URL} | tar -${PLUGIN_EXTRACT_PARAMS} -C ${PLUGIN_CORE_PATH} --strip 1"
-  wget -qO- "${PLUGIN_DOWNLOAD_URL}" | tar -"${PLUGIN_EXTRACT_PARAMS}" -C "${PLUGIN_CORE_PATH}" --strip 1
+  local dest_dir=${1}
+  echo "\$ wget -qO- ${PLUGIN_DOWNLOAD_URL} | tar -${PLUGIN_EXTRACT_PARAMS} -C ${dest_dir} --strip 1"
+  wget -qO- "${PLUGIN_DOWNLOAD_URL}" | tar -"${PLUGIN_EXTRACT_PARAMS}" -C "${dest_dir}" --strip 1
 }
 
 plugin_oc_from_git() {
-
-  pushd "${PLUGIN_CORE_PATH}"
+  local dest_dir=${1}
+  pushd "${dest_dir}"
     echo "\$ git init"
     git init
 
@@ -97,9 +104,24 @@ plugin_oc_from_git() {
   popd
 }
 
+plugin_oc_move() {
+  local excluded=""
+  local verbose=""
+  if [[ "${PLUGIN_DEBUG}" == "true" ]]; then
+    verbose="-v"
+  fi
+  for excluded_pattern in $(echo ${PLUGIN_EXCLUDE} | tr "," " "); do
+    excluded="${excluded} --exclude ${excluded_pattern}"
+  done
+  cmd="rsync -aIX ${verbose} ${excluded} ${PLUGIN_TMP_DIR} ${PLUGIN_CORE_PATH}"
+  echo "${cmd}"
+  ${cmd}
+}
+
 
 plugin_execute_build() {
-  pushd "${PLUGIN_CORE_PATH}"
+  local core_path=${1}
+  pushd "${core_path}"
     echo "\$ make"
     make
   popd
@@ -168,16 +190,22 @@ plugin_install_owncloud() {
 
 plugin_main() {
 
+  if [[ ! -d "${PLUGIN_TMP_DIR}" ]]; then
+    mkdir -p "${PLUGIN_TMP_DIR}"
+  fi
+
   if [[ ! -d "${PLUGIN_CORE_PATH}" ]]; then
     mkdir -p "${PLUGIN_CORE_PATH}"
   fi
 
   if [[ ! -z "${PLUGIN_GIT_REFERENCE}" ]]; then
-    plugin_oc_from_git
-    plugin_execute_build
+    plugin_oc_from_git "${PLUGIN_TMP_DIR}"
+    plugin_execute_build "${PLUGIN_TMP_DIR}"
   else
-    plugin_oc_from_tarball
+    plugin_oc_from_tarball "${PLUGIN_TMP_DIR}"
   fi
+
+    plugin_oc_move
 
   if [[ "${PLUGIN_INSTALL}" == "true" ]]; then
     plugin_install_owncloud
