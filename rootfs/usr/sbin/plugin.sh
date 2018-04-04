@@ -107,13 +107,15 @@ plugin_oc_from_git() {
 plugin_oc_move() {
   local excluded=""
   local verbose=""
+  local src_path=${1}
+  local dest_path=${2}
   if [[ "${PLUGIN_DEBUG}" == "true" ]]; then
     verbose="-v"
   fi
   for excluded_pattern in $(echo ${PLUGIN_EXCLUDE} | tr "," " "); do
     excluded="${excluded} --exclude ${excluded_pattern}"
   done
-  cmd="rsync -aIX ${verbose} ${excluded} ${PLUGIN_TMP_DIR} ${PLUGIN_CORE_PATH}"
+  cmd="rsync -aIX ${verbose} ${excluded} ${src_path} ${dest_path}"
   echo "${cmd}"
   ${cmd}
 }
@@ -200,12 +202,14 @@ plugin_main() {
 
   if [[ ! -z "${PLUGIN_GIT_REFERENCE}" ]]; then
     plugin_oc_from_git "${PLUGIN_TMP_DIR}"
-    plugin_execute_build "${PLUGIN_TMP_DIR}"
+    plugin_oc_move "${PLUGIN_TMP_DIR}" "${PLUGIN_CORE_PATH}"
+    plugin_execute_build "${PLUGIN_CORE_PATH}"
   else
     plugin_oc_from_tarball "${PLUGIN_TMP_DIR}"
+    plugin_oc_move "${PLUGIN_TMP_DIR}" "${PLUGIN_CORE_PATH}"
   fi
 
-    plugin_oc_move
+
 
   if [[ "${PLUGIN_INSTALL}" == "true" ]]; then
     plugin_install_owncloud
