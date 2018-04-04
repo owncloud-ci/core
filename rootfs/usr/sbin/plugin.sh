@@ -73,7 +73,9 @@ declare -x PLUGIN_DB_HOST
 declare -x PLUGIN_DB_PREFIX
 [[ -z "${PLUGIN_DB_PREFIX}" ]] && PLUGIN_DB_PREFIX="oc_"
 
-#
+declare -x PLUGIN_DB_TIMEOUT
+[[ -z "${PLUGIN_DB_TIMEOUT}" ]] && PLUGIN_DB_TIMEOUT="45"
+
 
 readonly PLUGIN_TMP_DIR="/tmp/owncloud/"
 
@@ -130,12 +132,46 @@ plugin_execute_build() {
 plugin_wait_for_database() {
     local host_name="${1}"
     local default_port="${2}"
-    if ! grep -q ":" <<<${host_name}
+    if ! grep -q ":" <<< "${host_name}"
     then
         host_name="${host_name}:${default_port}"
     fi
-    echo "$ wait-for-it ${host_name}"
-    wait-for-it "${host_name}"
+    echo "$ wait-for-it -t ${PLUGIN_DB_TIMEOUT} ${host_name}"
+    wait-for-it -t "${PLUGIN_DB_TIMEOUT}" "${host_name}"
+}
+
+plugin_wait_for_oracle() {
+    local sqlplus=/usr/lib/oracle/12.2/client64/bin/sqlplus
+    local result
+    local host_name="${PLUGIN_DB_HOST}"
+    if ! grep -q ":" <<< "${host_name}"
+    then
+        host_name="${host_name}:1521"
+    fi
+
+
+    echo "wait-for-oracle: waiting ${PLUGIN_DB_TIMEOUT} seconds for ${host_name}"
+    for i in $(seq "${PLUGIN_DB_TIMEOUT}"); do
+        # disabled to not abort testing the connection
+        set +eo pipefail
+
+        echo "QUIT" | $sqlplus -L "${PLUGIN_DB_USERNAME}/${PLUGIN_DB_PASSWORD}@${host_name}/${PLUGIN_DB_NAME}" | grep "Connected to:" > /dev/null 2>&1
+        result=$?
+
+        # reenable pipefail
+        set -eo pipefail
+
+        if [ ${result} -eq 0 ] ; then
+            echo "wait-for-oracle: ${host_name} available after ${i} seconds"
+            break
+        fi
+        sleep 1
+    done
+    if [ ! ${result} -eq 0 ] ; then
+        echo "wait-for-oracle: timeout - ${host_name} still not available after ${PLUGIN_DB_TIMEOUT} seconds"
+        exit 1
+    fi
+
 }
 
 plugin_check_database() {
@@ -151,7 +187,7 @@ plugin_check_database() {
         plugin_wait_for_database "$host_to_wait" 5432
       ;;
     oci)
-        plugin_wait_for_database "$host_to_wait" 1521
+        plugin_wait_for_oracle
       ;;
     *)
       echo "\"${db_type}\" is a unsupported database type !"

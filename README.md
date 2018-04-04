@@ -59,6 +59,7 @@ DB_USERNAME        (owncloud)
 DB_PASSWORD        (owncloud)
 DB_HOST            (localhost:3306)
 DB_PREFIX          (oc_)
+PLUGIN_DB_TIMEOUT  (45)
 EXCLUDE            
 ```
 ## Examples
