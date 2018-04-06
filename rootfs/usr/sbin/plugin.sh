@@ -84,6 +84,11 @@ plugin_oc_from_tarball() {
   local dest_dir=${1}
   echo "\$ wget -qO- ${PLUGIN_DOWNLOAD_URL} | tar -${PLUGIN_EXTRACT_PARAMS} -C ${dest_dir} --strip 1"
   wget -qO- "${PLUGIN_DOWNLOAD_URL}" | tar -"${PLUGIN_EXTRACT_PARAMS}" -C "${dest_dir}" --strip 1
+  build_sha=$(grep OC_Build "${dest_dir}/version.php" | cut -d "'" -f2 | cut -d " " -f2)
+  build_date=$(grep OC_Build "${dest_dir}/version.php" | cut -d "'" -f2 | cut -d " " -f1)
+  build_version=$(grep OC_VersionString "${dest_dir}/version.php" | cut -d "'" -f2)
+  build_channel=$(grep OC_Channel "${dest_dir}/version.php" | cut -d "'" -f2)
+  echo "Fetched ${build_version} - channel: ${build_channel} - build at ${build_date} - SHA: ${build_sha}"
 }
 
 plugin_oc_from_git() {
@@ -103,6 +108,9 @@ plugin_oc_from_git() {
 
     echo "\$ git submodule update --init"
     git submodule update --init
+
+    echo "\$ git log --format=oneline -n 1"
+    git log --format=oneline -n 1
   popd
 }
 
