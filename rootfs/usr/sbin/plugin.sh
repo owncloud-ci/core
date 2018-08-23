@@ -36,6 +36,9 @@ declare -x PLUGIN_DOWNLOAD_FILENAME
 [[ ! -z "${CORE_DOWNLOAD_URL}" ]] && PLUGIN_DOWNLOAD_URL="${CORE_DOWNLOAD_URL}"
 [[ -z "${PLUGIN_DOWNLOAD_URL}" ]] && PLUGIN_DOWNLOAD_URL="https://download.owncloud.org/community/${PLUGIN_DOWNLOAD_FILENAME}"
 
+declare -x PLUGIN_TESTING_APP_GIT
+[[ -z "${PLUGIN_TESTING_APP_GIT}" ]] && PLUGIN_TESTING_APP_GIT="https://github.com/owncloud/testing.git"
+
 declare -x PLUGIN_EXTRACT_PARAMS
 [[ -z "${PLUGIN_EXTRACT_PARAMS}" ]] && PLUGIN_EXTRACT_PARAMS="xj"
 
@@ -234,6 +237,18 @@ plugin_install_owncloud() {
 
 }
 
+plugin_install_testing_app() {
+  local core_path=${1}
+  pushd "${core_path}/apps"
+  if [[ ! -d "testing" ]]; then
+    echo "installing testing app"
+    git clone "${PLUGIN_TESTING_APP_GIT}"
+  else
+    echo "testing app already available"
+  fi
+  popd
+}
+
 plugin_main() {
 
   if [[ ! -d "${PLUGIN_TMP_DIR}" ]]; then
@@ -246,11 +261,14 @@ plugin_main() {
 
   if [[ ! -z "${PLUGIN_GIT_REFERENCE}" ]]; then
     plugin_oc_from_git "${PLUGIN_TMP_DIR}"
+    plugin_install_testing_app
     plugin_oc_move "${PLUGIN_TMP_DIR}" "${PLUGIN_CORE_PATH}"
     plugin_execute_build "${PLUGIN_CORE_PATH}"
+    plugin_install_testing_app "${PLUGIN_TMP_DIR}"
   else
     plugin_oc_from_tarball "${PLUGIN_TMP_DIR}"
     plugin_oc_move "${PLUGIN_TMP_DIR}" "${PLUGIN_CORE_PATH}"
+    plugin_install_testing_app "${PLUGIN_TMP_DIR}"
   fi
 
 
