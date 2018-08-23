@@ -264,11 +264,11 @@ plugin_main() {
     plugin_install_testing_app
     plugin_oc_move "${PLUGIN_TMP_DIR}" "${PLUGIN_CORE_PATH}"
     plugin_execute_build "${PLUGIN_CORE_PATH}"
-    plugin_install_testing_app "${PLUGIN_TMP_DIR}"
+    plugin_install_testing_app "${PLUGIN_CORE_PATH}"
   else
     plugin_oc_from_tarball "${PLUGIN_TMP_DIR}"
     plugin_oc_move "${PLUGIN_TMP_DIR}" "${PLUGIN_CORE_PATH}"
-    plugin_install_testing_app "${PLUGIN_TMP_DIR}"
+    plugin_install_testing_app "${PLUGIN_CORE_PATH}"
   fi
 
 
