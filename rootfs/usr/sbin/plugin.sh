@@ -261,7 +261,6 @@ plugin_main() {
 
   if [[ ! -z "${PLUGIN_GIT_REFERENCE}" ]]; then
     plugin_oc_from_git "${PLUGIN_TMP_DIR}"
-    plugin_install_testing_app
     plugin_oc_move "${PLUGIN_TMP_DIR}" "${PLUGIN_CORE_PATH}"
     plugin_execute_build "${PLUGIN_CORE_PATH}"
     plugin_install_testing_app "${PLUGIN_CORE_PATH}"
