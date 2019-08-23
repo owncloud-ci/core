@@ -9,7 +9,7 @@ The plugin will fetch ownCloud core either from a prebuilt tarball or from a bra
 The plugin requires either `VERSION`, `GIT_REFERENCE` or `DOWNLOAD_URL` to be defined. All other variables are optional
 
 - `VERSION`  
-The owncloud tarball version to fetch from https://download.owncloud.org/community/
+The owncloud tarball version to fetch from https://download.owncloud.org/community/ or the daily or testing sub-directory
 
 - `GIT_REFERENCE`  
 The branch to fetch from https://github.com/owncloud/core
@@ -66,7 +66,7 @@ EXCLUDE
 
 **Basic Example**  
 
-Download `owncloud-daily-stable-10.tar.bz2` and put contents into `/var/www/owncloud`, install owncloud with sqlite
+Download `owncloud-daily-master-qa.tar.bz2` and put contents into `/var/www/owncloud`, install owncloud with sqlite
 ```
 workspace:
   base: /var/www/owncloud
@@ -76,7 +76,7 @@ pipeline:
   install-server:
     image: owncloudci/core
     pull: true
-    version: daily-stable10-qa
+    version: daily-master-qa
 ```
 
 **Git core branch and mysql as database**  
@@ -122,7 +122,7 @@ pipeline:
     pull: true
     exclude:
       - apps/notifications
-    version: daily-stable10-qa
+    version: daily-master-qa
 ```
 
 ## Issues, Feedback and Ideas
@@ -135,7 +135,7 @@ Open an [Issue](https://github.com/owncloud-ci/php/issues)
 Fork -> Patch -> Push -> Pull Request
 
 
-Please note, that environment variables within `plugin.sh` are prefixed since drone will automatically prefix this variables with `PLUGIN_` when injecting them 
+Please note, that environment variables within `plugin.sh` are prefixed since drone will automatically prefix these variables with `PLUGIN_` when injecting them 
 
 ## Authors
 
