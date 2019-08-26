@@ -34,7 +34,6 @@ declare -x PLUGIN_DOWNLOAD_FILENAME
 
 # CORE_DOWNLOAD_URL should always override PLUGIN variable
 [[ ! -z "${CORE_DOWNLOAD_URL}" ]] && PLUGIN_DOWNLOAD_URL="${CORE_DOWNLOAD_URL}"
-[[ -z "${PLUGIN_DOWNLOAD_URL}" ]] && PLUGIN_DOWNLOAD_URL="https://download.owncloud.org/community/${PLUGIN_DOWNLOAD_FILENAME}"
 
 declare -x PLUGIN_TESTING_APP_GIT
 [[ -z "${PLUGIN_TESTING_APP_GIT}" ]] && PLUGIN_TESTING_APP_GIT="https://github.com/owncloud/testing.git"
@@ -83,8 +82,25 @@ declare -x PLUGIN_DB_TIMEOUT
 readonly PLUGIN_TMP_DIR="/tmp/owncloud/"
 
 #
+plugin_validate_url() {
+  if [[ `wget -S --spider $1  2>&1 | grep 'HTTP/1.1 200 OK'` ]]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
 plugin_oc_from_tarball() {
   local dest_dir=${1}
+  if  [[ -z "${PLUGIN_DOWNLOAD_URL}" ]]; then
+    PLUGIN_DOWNLOAD_URL="https://download.owncloud.org/community/daily/${PLUGIN_DOWNLOAD_FILENAME}"
+    if ! plugin_validate_url ${PLUGIN_DOWNLOAD_URL} ; then
+      PLUGIN_DOWNLOAD_URL="https://download.owncloud.org/community/testing/${PLUGIN_DOWNLOAD_FILENAME}"
+      if ! plugin_validate_url ${PLUGIN_DOWNLOAD_URL} ; then
+        PLUGIN_DOWNLOAD_URL="https://download.owncloud.org/community/${PLUGIN_DOWNLOAD_FILENAME}"
+      fi
+    fi
+  fi
   echo "\$ wget -qO- ${PLUGIN_DOWNLOAD_URL} | tar -${PLUGIN_EXTRACT_PARAMS} -C ${dest_dir} --strip 1"
   wget -qO- "${PLUGIN_DOWNLOAD_URL}" | tar -"${PLUGIN_EXTRACT_PARAMS}" -C "${dest_dir}" --strip 1
   build_sha=$(grep OC_Build "${dest_dir}/version.php" | cut -d "'" -f2 | cut -d " " -f2)
