@@ -14,7 +14,11 @@ pipeline:
     label_schema:
       - version=${DRONE_BRANCH}
     dry_run: true
-    tags: [ 'latest' ]
+    build_args:
+      - PHP_VERSION=${PHP_VERSION}
+    tags:
+      - ${TAG1}
+      - ${TAG2}
     when:
       event: [ pull_request ]
 
@@ -25,7 +29,11 @@ pipeline:
     repo: owncloudci/core
     label_schema:
       - version=${DRONE_BRANCH}
-    tags: [ 'latest' ]
+    build_args:
+      - PHP_VERSION=${PHP_VERSION}
+    tags:
+      - ${TAG1}
+      - ${TAG2}
     when:
       event: [ push ]
 
@@ -45,3 +53,17 @@ pipeline:
     channel: drone
     when:
       status: [ success, failure ]
+
+matrix:
+  include:
+    - PHP_VERSION: 5.6
+      TAG1: 5.6
+    - PHP_VERSION: 7.0
+      TAG1: 7.0
+    - PHP_VERSION: 7.1
+      TAG1: latest
+      TAG2: 7.1
+    - PHP_VERSION: 7.2
+      TAG1: 7.2
+    - PHP_VERSION: 7.3
+      TAG1: 7.3
