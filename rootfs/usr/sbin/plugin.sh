@@ -76,7 +76,7 @@ declare -x PLUGIN_DB_PREFIX
 [[ -z "${PLUGIN_DB_PREFIX}" ]] && PLUGIN_DB_PREFIX="oc_"
 
 declare -x PLUGIN_DB_TIMEOUT
-[[ -z "${PLUGIN_DB_TIMEOUT}" ]] && PLUGIN_DB_TIMEOUT="120"
+[[ -z "${PLUGIN_DB_TIMEOUT}" ]] && PLUGIN_DB_TIMEOUT="600"
 
 
 readonly PLUGIN_TMP_DIR="/tmp/owncloud/"

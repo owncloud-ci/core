@@ -59,7 +59,7 @@ DB_USERNAME        (owncloud)
 DB_PASSWORD        (owncloud)
 DB_HOST            (localhost:3306)
 DB_PREFIX          (oc_)
-DB_TIMEOUT         (120)
+DB_TIMEOUT         (600)
 EXCLUDE            
 ```
 ## Examples
