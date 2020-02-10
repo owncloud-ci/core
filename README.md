@@ -2,6 +2,7 @@
 
 [![Build Status](https://drone.owncloud.com/api/badges/owncloud-ci/core/status.svg)](https://drone.owncloud.com/owncloud-ci/core)
 
+
 ownCloud Core for CI pipelines. The plugin will fetch ownCloud core either from a prebuilt tarball or from a branch/tag from GitHub and aims to ease the setup process for testing owncloud applications.
 
 ## Plugin Variables
