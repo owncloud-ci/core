@@ -24,7 +24,7 @@ If `CORE_PATH` is not defined - the plugin assumes the workspace directory is ne
 
 With the following definition of the workspace in the `drone.yml`
 
-```Yaml
+```yaml
 workspace:
    base: /owncloud
    path: apps/app_to_test
@@ -32,7 +32,7 @@ workspace:
 
 The directory layout would be like this:
 
-```Shell
+```console
 owncloud              ( PATH )
   └── apps
      └── app_to_test  ( workspace )
@@ -40,7 +40,7 @@ owncloud              ( PATH )
 
 ### Full list of variables
 
-```Shell
+```console
 VERSION
 GIT_REFERENCE
 DOWNLOAD_URL
@@ -69,7 +69,7 @@ EXCLUDE
 
 Download `owncloud-daily-master-qa.tar.bz2` and put contents into `/var/www/owncloud`, install owncloud with sqlite
 
-```Yaml
+```yaml
 workspace:
   base: /var/www/owncloud
   path: apps/my_app
@@ -85,7 +85,7 @@ pipeline:
 
 Fetch stable10 branch into `/drone`, install owncloud with mysql
 
-```Yaml
+```yaml
 workspace:
   base: /drone
   path: apps/my_app
@@ -113,7 +113,7 @@ services:
 
 **Exclude folders/files from core**
 
-```Yaml
+```yaml
 workspace:
   base: /var/www/owncloud
   path: apps/my_app
