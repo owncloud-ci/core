@@ -1,46 +1,46 @@
-# CORE
+# core
 
-:wrench: This is a [drone ci plugin](https://github.com/drone) to be used in our CI pipeline and aims to ease the setup process for testing owncloud applications.
+[![Build Status](https://drone.owncloud.com/api/badges/owncloud-ci/core/status.svg)](https://drone.owncloud.com/owncloud-ci/core)
 
-The plugin will fetch ownCloud core either from a prebuilt tarball or from a branch/tag from github. 
+ownCloud Core for CI pipelines. The plugin will fetch ownCloud core either from a prebuilt tarball or from a branch/tag from GitHub and aims to ease the setup process for testing owncloud applications.
 
 ## Plugin Variables
 
 The plugin requires either `VERSION`, `GIT_REFERENCE` or `DOWNLOAD_URL` to be defined. All other variables are optional
 
-- `VERSION`  
+- `VERSION`
 The owncloud tarball version to fetch from https://download.owncloud.org/community/ or the daily or testing sub-directory
 
-- `GIT_REFERENCE`  
+- `GIT_REFERENCE`
 The branch to fetch from https://github.com/owncloud/core
 
-- `DOWNLOAD_URL`  
+- `DOWNLOAD_URL`
 Provide a tarball from a different location
 
 - `EXCLUDE`
 Exclude files/folders from being copied to the workspace. This is useful when testing apps that are included in the nightly tarballs. The exclude pattern uses rsync `--exclude` logic
 
-
 If `CORE_PATH` is not defined - the plugin assumes the workspace directory is nested two directories deeper in relation to the owncloud folder
 
 With the following definition of the workspace in the `drone.yml`
-```
+
+```yaml
 workspace:
    base: /owncloud
    path: apps/app_to_test
 ```
 
 The directory layout would be like this:
-```
+
+```console
 owncloud              ( PATH )
-  └── apps  
+  └── apps
      └── app_to_test  ( workspace )
 ```
 
-
 ### Full list of variables
 
-```
+```console
 VERSION
 GIT_REFERENCE
 DOWNLOAD_URL
@@ -60,14 +60,16 @@ DB_PASSWORD        (owncloud)
 DB_HOST            (localhost:3306)
 DB_PREFIX          (oc_)
 DB_TIMEOUT         (600)
-EXCLUDE            
+EXCLUDE
 ```
+
 ## Examples
 
-**Basic Example**  
+**Basic Example**
 
 Download `owncloud-daily-master-qa.tar.bz2` and put contents into `/var/www/owncloud`, install owncloud with sqlite
-```
+
+```yaml
 workspace:
   base: /var/www/owncloud
   path: apps/my_app
@@ -79,11 +81,11 @@ pipeline:
     version: daily-master-qa
 ```
 
-**Git core branch and mysql as database**  
+**Git core branch and mysql as database**
 
 Fetch stable10 branch into `/drone`, install owncloud with mysql
 
-```
+```yaml
 workspace:
   base: /drone
   path: apps/my_app
@@ -111,7 +113,7 @@ services:
 
 **Exclude folders/files from core**
 
-```
+```yaml
 workspace:
   base: /var/www/owncloud
   path: apps/my_app
@@ -125,30 +127,10 @@ pipeline:
     version: daily-master-qa
 ```
 
-## Issues, Feedback and Ideas
-
-Open an [Issue](https://github.com/owncloud-ci/php/issues)
-
-
-## Contributing
-
-Fork -> Patch -> Push -> Pull Request
-
-
-Please note, that environment variables within `plugin.sh` are prefixed since drone will automatically prefix these variables with `PLUGIN_` when injecting them 
-
-## Authors
-
-* [Patrick Jahns](https://github.com/patrickjahns)
-
-
 ## License
 
-MIT
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+## Maintainers
 
-## Copyright
-
-```
-Copyright (c) 2018 Patrick Jahns <pjahns@owncloud.com>
-```
+[Robert Kaussow](https://github.com/xoxys/)
