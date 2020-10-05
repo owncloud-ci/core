@@ -1,4 +1,4 @@
-FROM owncloudci/php:7.2
+FROM owncloudci/php:7.3
 
 LABEL maintainer="ownCloud DevOps <devops@owncloud.com>" \
   org.label-schema.name="ownCloud CI core" \
