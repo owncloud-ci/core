@@ -9,16 +9,16 @@ ownCloud Core for CI pipelines. The plugin will fetch ownCloud core either from 
 The plugin requires either `VERSION`, `GIT_REFERENCE` or `DOWNLOAD_URL` to be defined. All other variables are optional
 
 - `VERSION`
-The owncloud tarball version to fetch from https://download.owncloud.org/community/ or the daily or testing sub-directory
+  The owncloud tarball version to fetch from https://download.owncloud.org/community/ or the daily or testing sub-directory
 
 - `GIT_REFERENCE`
-The branch to fetch from https://github.com/owncloud/core
+  The branch to fetch from https://github.com/owncloud/core
 
 - `DOWNLOAD_URL`
-Provide a tarball from a different location
+  Provide a tarball from a different location
 
 - `EXCLUDE`
-Exclude files/folders from being copied to the workspace. This is useful when testing apps that are included in the nightly tarballs. The exclude pattern uses rsync `--exclude` logic
+  Exclude files/folders from being copied to the workspace. This is useful when testing apps that are included in the nightly tarballs. The exclude pattern uses rsync `--exclude` logic
 
 If `CORE_PATH` is not defined - the plugin assumes the workspace directory is nested two directories deeper in relation to the owncloud folder
 
@@ -26,8 +26,8 @@ With the following definition of the workspace in the `drone.yml`
 
 ```yaml
 workspace:
-   base: /owncloud
-   path: apps/app_to_test
+  base: /owncloud
+  path: apps/app_to_test
 ```
 
 The directory layout would be like this:
@@ -130,7 +130,3 @@ pipeline:
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Maintainers
-
-[Robert Kaussow](https://github.com/xoxys/)
