@@ -1,6 +1,10 @@
 # core
 
-[![Build Status](https://drone.owncloud.com/api/badges/owncloud-ci/core/status.svg)](https://drone.owncloud.com/owncloud-ci/core)
+[![Build Status](https://img.shields.io/drone/build/owncloud-ci/core?logo=drone&server=https%3A%2F%2Fdrone.owncloud.com)](https://drone.owncloud.com/owncloud-ci/core)
+[![Docker Hub](https://img.shields.io/docker/v/owncloudci/core?logo=docker&label=dockerhub&sort=semver&logoColor=white)](https://hub.docker.com/r/owncloudci/core)
+[![GitHub contributors](https://img.shields.io/github/contributors/owncloud-ci/core)](https://github.com/owncloud-ci/core/graphs/contributors)
+[![Source: GitHub](https://img.shields.io/badge/source-github-blue.svg?logo=github&logoColor=white)](https://github.com/owncloud-ci/core)
+[![License: MIT](https://img.shields.io/github/license/owncloud-ci/core)](https://github.com/owncloud-ci/core/blob/master/LICENSE)
 
 ownCloud Core for CI pipelines. The plugin will fetch ownCloud core either from a prebuilt tarball or from a branch/tag from GitHub and aims to ease the setup process for testing owncloud applications.
 
@@ -65,7 +69,7 @@ EXCLUDE
 
 ## Examples
 
-**Basic Example**
+### Basic Example
 
 Download `owncloud-daily-master-qa.tar.bz2` and put contents into `/var/www/owncloud`, install owncloud with sqlite
 
@@ -81,7 +85,7 @@ pipeline:
     version: daily-master-qa
 ```
 
-**Git core branch and mysql as database**
+### Git core branch and mysql as database
 
 Fetch stable10 branch into `/drone`, install owncloud with mysql
 
@@ -111,7 +115,7 @@ services:
       - MYSQL_ROOT_PASSWORD=secret
 ```
 
-**Exclude folders/files from core**
+### Exclude folders/files from core
 
 ```yaml
 workspace:
@@ -129,4 +133,10 @@ pipeline:
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/owncloud-ci/core/blob/master/LICENSE) file for details.
+
+## Copyright
+
+```Text
+Copyright (c) 2021 ownCloud GmbH
+```
