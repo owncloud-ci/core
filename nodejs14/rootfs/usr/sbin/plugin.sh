@@ -93,11 +93,11 @@ plugin_validate_url() {
 plugin_oc_from_tarball() {
   local dest_dir=${1}
   if  [[ -z "${PLUGIN_DOWNLOAD_URL}" ]]; then
-    PLUGIN_DOWNLOAD_URL="https://download.owncloud.org/community/daily/${PLUGIN_DOWNLOAD_FILENAME}"
+    PLUGIN_DOWNLOAD_URL="https://download.owncloud.com/server/daily/${PLUGIN_DOWNLOAD_FILENAME}"
     if ! plugin_validate_url ${PLUGIN_DOWNLOAD_URL} ; then
-      PLUGIN_DOWNLOAD_URL="https://download.owncloud.org/community/testing/${PLUGIN_DOWNLOAD_FILENAME}"
+      PLUGIN_DOWNLOAD_URL="https://download.owncloud.com/server/testing/${PLUGIN_DOWNLOAD_FILENAME}"
       if ! plugin_validate_url ${PLUGIN_DOWNLOAD_URL} ; then
-        PLUGIN_DOWNLOAD_URL="https://download.owncloud.org/community/${PLUGIN_DOWNLOAD_FILENAME}"
+        PLUGIN_DOWNLOAD_URL="https://download.owncloud.com/server/${PLUGIN_DOWNLOAD_FILENAME}"
       fi
     fi
   fi
