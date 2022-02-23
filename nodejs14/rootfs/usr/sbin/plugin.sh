@@ -97,7 +97,7 @@ plugin_oc_from_tarball() {
     if ! plugin_validate_url ${PLUGIN_DOWNLOAD_URL} ; then
       PLUGIN_DOWNLOAD_URL="https://download.owncloud.com/server/testing/${PLUGIN_DOWNLOAD_FILENAME}"
       if ! plugin_validate_url ${PLUGIN_DOWNLOAD_URL} ; then
-        PLUGIN_DOWNLOAD_URL="https://download.owncloud.com/server/${PLUGIN_DOWNLOAD_FILENAME}"
+        PLUGIN_DOWNLOAD_URL="https://download.owncloud.com/server/stable/${PLUGIN_DOWNLOAD_FILENAME}"
       fi
     fi
   fi
