@@ -13,7 +13,7 @@ ownCloud Core for CI pipelines. The plugin will fetch ownCloud core either from 
 The plugin requires either `VERSION`, `GIT_REFERENCE` or `DOWNLOAD_URL` to be defined. All other variables are optional
 
 - `VERSION`
-  The owncloud tarball version to fetch from https://download.owncloud.com/server/ or the daily or testing sub-directory
+  The owncloud tarball version to fetch from https://download.owncloud.com/server/stable or daily or testing directory
 
 - `GIT_REFERENCE`
   The branch to fetch from https://github.com/owncloud/core
@@ -51,7 +51,7 @@ DOWNLOAD_URL
 CORE_DOWNLOAD_URL
 EXTRACT_PARAMS     (xj)
 DOWNLOAD_FILENAME  (owncloud-${PLUGIN_VERSION}.tar.bz2)
-DOWNLOAD_URL       (https://download.owncloud.com/server/${PLUGIN_DOWNLOAD_FILENAME})
+DOWNLOAD_URL       (https://download.owncloud.com/server/stable/${PLUGIN_DOWNLOAD_FILENAME})
 GIT_REPOSITORY     (https://github.com/owncloud/core.git)
 INSTALL            (true)
 ADMIN_LOGIN        (admin)
