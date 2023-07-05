@@ -137,7 +137,7 @@ def rocketchat(config):
         'failure': 'ignore',
         'settings': {
           'webhook': {
-            'from_secret': 'private_rocketchat',
+            'from_secret': 'rocketchat_chat_webhook',
           },
           'channel': 'builds',
         },
