@@ -245,7 +245,7 @@ plugin_install_owncloud() {
                      --database-user=${PLUGIN_DB_USERNAME} \
                      --database-pass=${PLUGIN_DB_PASSWORD}"
     else
-      _occ_command+=" --database-connection-string=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=${PLUGIN_DB_TYPE})(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=XE))) \
+      _occ_command+=" --database-connection-string=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=${PLUGIN_DB_HOST})(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=XE))) \
                      --database-user=${PLUGIN_DB_USERNAME} \
                      --database-pass=${PLUGIN_DB_PASSWORD}"
     fi
