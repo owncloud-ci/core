@@ -240,7 +240,7 @@ plugin_install_owncloud() {
         --data-dir=${PLUGIN_DATA_DIRECTORY} "
 
   if [[ "${PLUGIN_DB_TYPE}" != "sqlite" ]]; then
-    if [[ "${PLUGIN_DB_TYPE}" != "oracle" ]]; then
+    if [[ "${PLUGIN_DB_TYPE}" != "oci" ]]; then
       _occ_command+="--database-host=${PLUGIN_DB_HOST} \
                      --database-user=${PLUGIN_DB_USERNAME} \
                      --database-pass=${PLUGIN_DB_PASSWORD}"
