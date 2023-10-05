@@ -2,6 +2,7 @@ def main(ctx):
   versions = [
     'latest',
     'nodejs14',
+    'php82',
   ]
 
   arches = [
@@ -22,6 +23,8 @@ def main(ctx):
       config['path'] = 'latest'
     elif config['version'] == 'nodejs14':
       config['path'] = 'nodejs14'
+    elif config['version'] == 'php82':
+      config['path'] = 'php82'
     else:
       config['path'] = 'v%s' % config['version']
 
