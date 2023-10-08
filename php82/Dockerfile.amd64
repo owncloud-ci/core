@@ -1,0 +1,30 @@
+FROM owncloudci/php:8.2@sha256:7aaca83cb2801ce7cef791e5684d8bed469251ceacb3e5fd1b79c5668685b440
+
+LABEL maintainer="ownCloud GmbH <devops@owncloud.com>"
+LABEL org.opencontainers.image.authors="ownCloud DevOps <devops@owncloud.com>"
+LABEL org.opencontainers.image.title="ownCloud CI Core"
+LABEL org.opencontainers.image.url="https://hub.docker.com/r/owncloudci/core"
+LABEL org.opencontainers.image.source="https://github.com/owncloud-ci/core"
+LABEL org.opencontainers.image.documentation="https://github.com/owncloud-ci/core"
+
+ARG RETRY_VERSION
+
+# renovate: datasource=github-releases depName=owncloud-ci/retry
+ENV RETRY_VERSION="${RETRY_VERSION:-v2.0.0}"
+
+ADD rootfs /
+
+RUN apt-get update -y && \
+  apt-get install -y git-core build-essential libpng16-16 lsb-release && \
+  curl -SsfL -o /usr/local/bin/retry "https://github.com/owncloud-ci/retry/releases/download/v${RETRY_VERSION##v}/retry" && \
+  chmod 755 /usr/local/bin/retry && \
+  curl -s https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - && \
+  echo "deb https://deb.nodesource.com/node_14.x $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/node.list && \
+  apt-get update -y && \
+  apt-get install -y nodejs && \
+  apt-get clean && \
+  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+RUN npm install -g yarn npx --force
+
+ENTRYPOINT ["/usr/sbin/plugin.sh"]
