@@ -1,4 +1,4 @@
-FROM owncloudci/php:8.2@sha256:87720330cef33fc0d926bc6a338b4149602ccd17fb5a19d1c1c2dec314aec01a
+FROM owncloudci/php:8.2@sha256:3e543ca8928b55b38eb786998e58c8755ee3ea3e6f0d61d641699a840e7a7f5b
 
 LABEL maintainer="ownCloud GmbH <devops@owncloud.com>"
 LABEL org.opencontainers.image.authors="ownCloud DevOps <devops@owncloud.com>"
