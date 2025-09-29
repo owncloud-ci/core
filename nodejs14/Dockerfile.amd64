@@ -1,4 +1,4 @@
-FROM owncloudci/php:7.4@sha256:55090cadf86827e0a82a097f846b9d7873dc0bc3291f303428250a926e9d6cb5
+FROM owncloudci/php:7.4@sha256:e13e6b5773236b9a4ed66149831025688f6771d5d57ebc1de866b0200ea07f69
 
 LABEL maintainer="ownCloud GmbH <devops@owncloud.com>"
 LABEL org.opencontainers.image.authors="ownCloud DevOps <devops@owncloud.com>"
@@ -14,7 +14,9 @@ ENV RETRY_VERSION="${RETRY_VERSION:-v2.0.0}"
 
 ADD rootfs /
 
-RUN apt-get update -y && \
+RUN apt-mark hold php7.4* && \
+  apt-add-repository --remove https://deb.owncloud.com/php.freexian.com jammy main && \
+  apt-get update -y && \
   apt-get install -y git-core build-essential libpng16-16 lsb-release && \
   curl -SsfL -o /usr/local/bin/retry "https://github.com/owncloud-ci/retry/releases/download/v${RETRY_VERSION##v}/retry" && \
   chmod 755 /usr/local/bin/retry && \
