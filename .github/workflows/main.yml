@@ -1,0 +1,46 @@
+name: Docker CI
+
+on:
+  push:
+    branches: [master]
+    tags: ["*"]
+  pull_request:
+
+jobs:
+  lint:
+    uses: owncloud-docker/ubuntu/.github/workflows/lint-editorconfig.yml@master  
+    
+  build:
+    needs: lint
+    uses: owncloud-docker/ubuntu/.github/workflows/docker-build.yml@master
+    with:
+      docker-repo-name: owncloudci/${{ github.event.repository.name }}
+      docker-tag: ${{ matrix.version }}
+      docker-context: v${{ matrix.version }}
+      docker-file: v${{ matrix.version }}/Dockerfile.multiarch
+      docker-hub-username: ${{ vars.DOCKERHUB_USERNAME }}
+      push: ${{ github.ref == 'refs/heads/master' }}
+      trivy-ignore-files: .trivyignore.yaml
+      docker-cache-from: type=gha,scope=${{ matrix.version }}
+      docker-cache-to: type=gha,scope=${{ matrix.version }},mode=max
+    secrets:
+      docker-hub-password: ${{ secrets.DOCKERHUB_TOKEN }}
+      docker-secrets: |
+        mirror-url=${{ secrets.DEB_MIRROR_URL }}
+        mirror-auth=machine ${{secrets.DEB_MIRROR_URL}} login ${{secrets.DEB_MIRROR_LOGIN}} password ${{secrets.DEB_MIRROR_PWD}}
+
+    strategy:
+      matrix:
+        # nodejs14 (with PHP 7.4) and nodejs 18 (with PHP 8.3) are supported by ownCloud 10/11 respectively
+        version: ["nodejs14", "php83"]
+
+  update-docker-hub-description:
+    needs: build
+    if: github.ref == 'refs/heads/master'
+    uses: owncloud-docker/ubuntu/.github/workflows/docker-hub-desc.yml@master
+    with:
+      docker-repo-name: owncloudci/${{ github.event.repository.name }}
+      docker-repo-description: ownCloud Classic core installer for use in CI
+      docker-hub-username: ${{ vars.DOCKERHUB_USERNAME }}
+    secrets:
+      docker-hub-password: ${{ secrets.DOCKERHUB_TOKEN }}
